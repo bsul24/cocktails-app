@@ -5,6 +5,7 @@ const searchBtn = document.querySelector(".search-btn");
 const drinkImg = document.querySelector("img");
 const drinkName = document.querySelector("h1");
 const ingList = document.querySelector(".ing-list");
+const instructions = document.querySelector(".instructions");
 const drinkList = document.querySelector(".drink-list");
 let result;
 
@@ -33,15 +34,15 @@ function renderPage(e) {
   );
   drinkImg.src = drink.strDrinkThumb;
   drinkName.textContent = drink.strDrink;
-  renderIngredients(data);
+  instructions.textContent = drink.strInstructions;
+  renderIngredients(drink);
 }
 
-function renderIngredients(data) {
+function renderIngredients(drink) {
   ingList.innerHTML = "";
-  const drinkData = data.drinks[0];
   let html = "";
   for (let i = 1; i <= 15; i++) {
-    const ing = drinkData[`strIngredient${i}`];
+    const ing = drink[`strIngredient${i}`];
     if (ing === null) break;
     html += `<li>${ing}</li>`;
   }
