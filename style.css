@@ -7,3 +7,9 @@
 img {
   max-width: 300px;
 }
+
+.drink-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}

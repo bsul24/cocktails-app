@@ -5,28 +5,20 @@ const searchBtn = document.querySelector(".search-btn");
 const drinkImg = document.querySelector("img");
 const drinkName = document.querySelector("h1");
 const ingList = document.querySelector(".ing-list");
-
-// let url = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita";
-// let returnData;
-
-// fetch(url)
-//   .then((res) => res.json()) // parse response as JSON
-//   .then((data) => {
-//     console.log(data);
-//     renderPage(data);
-//   })
-//   .catch((err) => {
-//     console.log(`error ${err}`);
-//   });
+const drinkList = document.querySelector(".drink-list");
+let result;
 
 function searchDrink() {
   let drink = drinkInput.value;
   let url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`;
+
   fetch(url)
     .then((res) => res.json()) // parse response as JSON
     .then((data) => {
       console.log(data);
-      renderPage(data);
+      result = data;
+      renderDrinkList(data);
+      // renderPage(data);
     })
     .catch((err) => {
       console.log(`error ${err}`);
@@ -35,13 +27,17 @@ function searchDrink() {
   drinkInput.blur();
 }
 
-function renderPage(data) {
-  drinkImg.src = data.drinks[0].strDrinkThumb;
-  drinkName.textContent = data.drinks[0].strDrink;
+function renderPage(e) {
+  const drink = result.drinks.find(
+    (drink) => drink.strDrink === e.target.textContent
+  );
+  drinkImg.src = drink.strDrinkThumb;
+  drinkName.textContent = drink.strDrink;
   renderIngredients(data);
 }
 
 function renderIngredients(data) {
+  ingList.innerHTML = "";
   const drinkData = data.drinks[0];
   let html = "";
   for (let i = 1; i <= 15; i++) {
@@ -50,6 +46,18 @@ function renderIngredients(data) {
     html += `<li>${ing}</li>`;
   }
   ingList.insertAdjacentHTML("afterbegin", html);
+}
+
+function renderDrinkList(data) {
+  drinkList.innerHTML = "";
+  let html = "";
+  for (let i = 0; i < data.drinks.length; i++) {
+    const drink = `<li class="drink-link">${data.drinks[i].strDrink}</li>`;
+    drinkList.insertAdjacentHTML("beforeend", drink);
+    const drinkLink = document.querySelector(".drink-link:last-child");
+    drinkLink.addEventListener("click", renderPage);
+  }
+  // drinkList.insertAdjacentHTML("afterbegin", html);
 }
 
 searchBtn.addEventListener("click", searchDrink);
