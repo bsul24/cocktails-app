@@ -43,8 +43,11 @@ function renderIngredients(drink) {
   let html = "";
   for (let i = 1; i <= 15; i++) {
     const ing = drink[`strIngredient${i}`];
+    const quant = drink[`strMeasure${i}`];
     if (ing === null) break;
-    html += `<li>${ing}</li>`;
+    html += `<li><span class="ing-quantity">${
+      quant === null ? "" : quant
+    }</span> ${ing}</li>`;
   }
   ingList.insertAdjacentHTML("afterbegin", html);
 }
